@@ -1,0 +1,459 @@
+<title>curio — Learn something you'll keep</title>
+
+<style>
+  :root {
+    color-scheme: light;
+
+    --paper:      #f7f4d5;
+    --paper-2:    #fffdea;
+    --ink:        #0a3323;
+    --ink-muted:  #55655a;
+    --ink-faint:  #7d8a78;
+    --hair:       #d5d6ab;
+    --hair-2:     #bfc394;
+    --label:      #5e7140;
+    --accent:     #d3968c;
+    --accent-ink: #0a3323;
+    --accent-dim: #b87b71;
+    --verify:     #105666;
+
+    --f-display: "Helvetica Neue", "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --f-body:    "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --f-ui:      system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --f-mono:    ui-monospace, "SF Mono", Menlo, "Cascadia Mono", Consolas, monospace;
+
+    --maxw: 1080px;
+    --gut:  clamp(20px, 5vw, 56px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --paper:      #0a3323;
+      --paper-2:    #0e3f2c;
+      --ink:        #f7f4d5;
+      --ink-muted:  #a9bda2;
+      --ink-faint:  #7f9a83;
+      --hair:       #1c4d38;
+      --hair-2:     #2a6047;
+      --label:      #9db07a;
+      --accent:     #d3968c;
+      --accent-ink: #0a3323;
+      --accent-dim: #e0aba2;
+      --verify:     #6fb6c6;
+    }
+  }
+
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --paper: #f7f4d5; --paper-2: #fffdea;
+    --ink: #0a3323; --ink-muted: #55655a; --ink-faint: #7d8a78;
+    --hair: #d5d6ab; --hair-2: #bfc394; --label: #5e7140;
+    --accent: #d3968c; --accent-ink: #0a3323; --accent-dim: #b87b71;
+    --verify: #105666;
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #0a3323; --paper-2: #0e3f2c;
+    --ink: #f7f4d5; --ink-muted: #a9bda2; --ink-faint: #7f9a83;
+    --hair: #1c4d38; --hair-2: #2a6047; --label: #9db07a;
+    --accent: #d3968c; --accent-ink: #0a3323; --accent-dim: #e0aba2;
+    --verify: #6fb6c6;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-ui);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .shell {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding-inline: var(--gut);
+  }
+
+  /* ─── shared type devices ─── */
+  .label {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--label);
+    font-weight: 600;
+  }
+
+  a { color: inherit; }
+
+  :where(a, button, input):focus-visible {
+    outline: 2px solid var(--verify);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* ─── 1. hero ─── */
+  .hero { padding-block: clamp(28px, 6vw, 56px) clamp(48px, 8vw, 92px); }
+
+  .wordmark {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--hair-2);
+  }
+  .wordmark .name {
+    font-family: var(--f-display);
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+  }
+  .wordmark .rule { flex: 1; }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+    gap: clamp(36px, 6vw, 72px);
+    align-items: center;
+    padding-top: clamp(40px, 7vw, 76px);
+  }
+
+  h1 {
+    font-family: var(--f-display);
+    font-size: clamp(44px, 8.2vw, 82px);
+    line-height: 0.94;
+    letter-spacing: -0.045em;
+    font-weight: 800;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h1 .kept { color: var(--accent); }
+
+  .deck {
+    font-family: var(--f-body);
+    font-size: clamp(17px, 2.1vw, 21px);
+    line-height: 1.45;
+    color: var(--ink-muted);
+    max-width: 34ch;
+    margin: 26px 0 0;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    margin-top: 34px;
+  }
+
+  .btn {
+    font-family: var(--f-ui);
+    font-size: 15.5px;
+    font-weight: 650;
+    letter-spacing: -0.005em;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 3px;
+    padding: 14px 26px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 140ms ease, border-color 140ms ease;
+  }
+  .btn:hover { background: var(--accent-dim); border-color: var(--accent-dim); }
+
+  .cta-note {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  /* the card specimen — the object the whole product is about */
+  .specimen {
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    border-radius: 4px;
+    padding: clamp(20px, 3vw, 28px);
+    box-shadow: 0 1px 0 var(--hair), 0 22px 44px -34px rgba(10, 51, 35, 0.55);
+  }
+  .specimen .topic {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--label);
+    font-weight: 600;
+  }
+  .specimen h2 {
+    font-family: var(--f-display);
+    font-size: clamp(21px, 2.6vw, 25px);
+    line-height: 1.12;
+    letter-spacing: -0.028em;
+    font-weight: 800;
+    margin: 12px 0 0;
+    text-wrap: balance;
+  }
+  .specimen p {
+    font-family: var(--f-body);
+    font-size: 15.5px;
+    line-height: 1.58;
+    color: var(--ink-muted);
+    margin: 13px 0 0;
+  }
+  .source {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--hair);
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    color: var(--verify);
+    flex-wrap: wrap;
+  }
+  .source .tick {
+    flex: 0 0 auto;
+    width: 15px; height: 15px;
+    border: 1.5px solid var(--verify);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 9px;
+    line-height: 1;
+  }
+  .source .url { color: var(--ink-faint); }
+
+  .swipe-hint {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* ─── 2. benefits ─── */
+  .benefits { padding-block: clamp(44px, 7vw, 76px); border-top: 1px solid var(--hair-2); }
+
+  .sec-label { margin-bottom: clamp(26px, 4vw, 40px); }
+
+  .rows { display: grid; gap: 0; }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 210px) minmax(0, 1fr);
+    gap: clamp(18px, 4vw, 52px);
+    padding-block: clamp(26px, 3.6vw, 38px);
+    border-top: 1px solid var(--hair);
+  }
+  .row:first-child { border-top: 0; padding-top: 0; }
+
+  .row h3 {
+    font-family: var(--f-display);
+    font-size: clamp(20px, 2.5vw, 26px);
+    line-height: 1.1;
+    letter-spacing: -0.032em;
+    font-weight: 800;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .row p {
+    font-family: var(--f-body);
+    font-size: clamp(15.5px, 1.7vw, 17.5px);
+    line-height: 1.58;
+    color: var(--ink-muted);
+    margin: 0;
+    max-width: 58ch;
+  }
+  .row p b { color: var(--ink); font-weight: 600; }
+
+  /* ─── 3. signup ─── */
+  .signup {
+    padding-block: clamp(48px, 8vw, 88px);
+    border-top: 1px solid var(--hair-2);
+  }
+  .signup-inner { max-width: 620px; }
+  .signup h2 {
+    font-family: var(--f-display);
+    font-size: clamp(30px, 5vw, 46px);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+    margin: 18px 0 0;
+    text-wrap: balance;
+  }
+  .signup .deck { margin-top: 18px; max-width: 46ch; }
+
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+  input[type="email"] {
+    flex: 1 1 260px;
+    min-width: 0;
+    font-family: var(--f-ui);
+    font-size: 15.5px;
+    color: var(--ink);
+    background: var(--paper-2);
+    border: 1px solid var(--hair-2);
+    border-radius: 3px;
+    padding: 14px 16px;
+  }
+  input[type="email"]::placeholder { color: var(--ink-faint); }
+  input[type="email"]:focus { border-color: var(--verify); }
+
+  .fineprint {
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    margin: 16px 0 0;
+  }
+
+  /* ─── 4. footer ─── */
+  footer {
+    padding-block: clamp(28px, 4vw, 40px) clamp(36px, 5vw, 52px);
+    border-top: 1px solid var(--hair-2);
+  }
+  .foot-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px 32px;
+  }
+  .foot-grid p { margin: 0; font-size: 13.5px; color: var(--ink-muted); }
+  .foot-grid .team { font-family: var(--f-mono); font-size: 12px; color: var(--label); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+
+  /* ─── responsive ─── */
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; padding-top: 38px; }
+    .deck { max-width: 42ch; }
+    .row { grid-template-columns: 1fr; gap: 12px; }
+  }
+</style>
+
+<div class="shell">
+
+  <!-- ─── 1. HERO ─── -->
+  <header class="hero">
+    <div class="wordmark">
+      <span class="name">curio</span>
+      <span class="rule"></span>
+      <span class="label">Waitlist open</span>
+    </div>
+
+    <div class="hero-grid">
+      <div>
+        <h1>Learn something you'll <span class="kept">keep</span>.</h1>
+        <p class="deck">
+          A swipeable, source-grounded knowledge feed — for people who are
+          going to scroll anyway.
+        </p>
+        <div class="cta-row">
+          <a class="btn" href="#signup">Join the waitlist</a>
+          <span class="cta-note">Early access · no spam</span>
+        </div>
+      </div>
+
+      <div class="specimen">
+        <span class="topic">🏛 History · card 04</span>
+        <h2>The Mughal road that outlived three empires</h2>
+        <p>
+          Sher Shah Suri rebuilt the Grand Trunk Road in the 1540s, lining
+          2,500 kilometres with wells, shade trees and rest houses spaced a
+          day's ride apart. The Mughals inherited it, the British paved it,
+          and it still carries traffic from Kabul to Chittagong today — one
+          piece of infrastructure that three successive empires each found
+          easier to maintain than to replace.
+        </p>
+        <div class="source">
+          <span class="tick" aria-hidden="true">✓</span>
+          <span>Verified against</span>
+          <span class="url">en.wikipedia.org/wiki/Grand_Trunk_Road</span>
+        </div>
+        <div class="swipe-hint">
+          <span>← Pass</span>
+          <span>Keep →</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── 2. BENEFITS ─── -->
+  <section class="benefits">
+    <p class="label sec-label">What you get</p>
+
+    <div class="rows">
+      <div class="row">
+        <h3>Nothing without a source</h3>
+        <p>
+          Every card is written from full source text, then audited claim by
+          claim before it reaches your feed. If a sentence isn't supported by
+          the source, the card doesn't ship. <b>No card exists without a link
+          you can go check yourself.</b>
+        </p>
+      </div>
+
+      <div class="row">
+        <h3>Swipes, not sessions</h3>
+        <p>
+          About 150 words a card — one real idea, finished. Keep what's worth
+          keeping, pass on the rest, and stop whenever you like.
+          <b>Your kept pile is the part you actually walk away with.</b>
+        </p>
+      </div>
+
+      <div class="row">
+        <h3>A feed that shows its work</h3>
+        <p>
+          Ten or fifteen swipes in, the feed noticeably re-tunes — and tells
+          you which topics moved and why. Every topic keeps a floor weight, so
+          narrowing your interests <b>never narrows your world.</b>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 3. SIGNUP ─── -->
+  <section class="signup" id="signup">
+    <div class="signup-inner">
+      <p class="label">Join the waitlist</p>
+      <h2>Be there for the first hundred cards.</h2>
+      <p class="deck">
+        We're opening curio to a small first group. Leave your email and
+        we'll send an invite when your topics are ready.
+      </p>
+
+      <form onsubmit="return false;">
+        <label for="email" class="label" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;">Email address</label>
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+        <button class="btn" type="submit">Join the waitlist</button>
+      </form>
+
+      <p class="fineprint">One email when we open. Nothing else.</p>
+    </div>
+  </section>
+
+  <!-- ─── 4. FOOTER ─── -->
+  <footer>
+    <div class="foot-grid">
+      <p>Built in Software Product Management, ISB</p>
+      <p class="team">Team Curio</p>
+    </div>
+  </footer>
+
+</div>
